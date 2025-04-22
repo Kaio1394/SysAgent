@@ -13,7 +13,7 @@ func main() {
 	logger.Log.Infoln("Starting SysAgent...")
 	server := gin.Default()
 
-	routes.MemoryRoutes(server)
+	routes.RegisterMetricsRoute(server)
 
 	_ = server.Run(":9095")
 }
