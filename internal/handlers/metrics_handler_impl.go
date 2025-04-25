@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"SysAgent/internal/models"
 	"SysAgent/internal/services"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -40,5 +41,23 @@ func (h *MetricsHandlerImpl) GetDiskInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"diskInfo": diskInfo})
 }
 
+func (h *MetricsHandlerImpl) GetDataCollection(c *gin.Context) {
+	memory, err := h.s.GetMemoryInfo(context.Background())
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	cpuInfo, err := h.s.GetCpuInfo()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	diskInfo, err := h.s.GetDiskInfo()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	infos := models.Metric{Memory: memory, Cpu: cpuInfo, Disk: diskInfo}
+	c.JSON(http.StatusOK, gin.H{"infos": infos})
+}
 func (h *MetricsHandlerImpl) StartCollect(c *gin.Context) {}
 func (h *MetricsHandlerImpl) StopCollect(c *gin.Context)  {}

@@ -12,4 +12,5 @@ func RegisterMetricsRoute(r *gin.Engine) {
 	r.GET("/cpu", h.GetCpuInfo)
 	r.GET("/memory", h.GetMemoryInfo)
 	r.GET("/disk", h.GetDiskInfo)
+	r.GET("/infos", h.GetDataCollection)
 }

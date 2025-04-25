@@ -1,0 +1,19 @@
+app:
+  name: "SysAgent"
+
+server:
+  host: "localhost"
+  port: 9095
+
+dataBase:
+  typeDatabase: "sqlite"
+  stringConnection: "SysAgent.db"
+
+#redis:
+#  host: "localhost"
+#  port: 6379
+
+#configAuth:
+#  host: "http://localhost"
+#  port: 9095
+#  endpoint: "/validate/token"

@@ -28,6 +28,7 @@ func (m *MetricsServiceImpl) GetCpuInfo() (models.Cpu, error) {
 	}
 	return cpuInfo, nil
 }
+
 func (m *MetricsServiceImpl) GetDiskInfo() (models.Disk, error) {
 	diskInfo, err := utils.GetDiskInfo()
 	if err != nil {
