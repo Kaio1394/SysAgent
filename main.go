@@ -26,7 +26,7 @@ func main() {
 
 	routes.RegisterAgentRoutes(conn, server)
 
-	routes.RegisterMetricsRoute(server)
+	routes.RegisterMetricsRoute(server, conn)
 
 	_ = server.Run(":" + strconv.Itoa(port))
 }

@@ -53,7 +53,18 @@ func (s *AgentServiceImpl) UpdateStatus(ctx context.Context, status string) erro
 		return errors.New("status agent not found")
 	}
 	agent := agents[0]
+	agent.Status = status
 	err = s.r.UpdateAgent(ctx, agent)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *AgentServiceImpl) CollectData(ctx context.Context, data *dto.CollectMetricCreateDto) error {
+	var dataModel models.CollectMetric
+	_ = copier.CopyWithOption(&dataModel, data, copier.Option{IgnoreEmpty: true})
+	err := s.r.CollectData(ctx, &dataModel)
 	if err != nil {
 		return err
 	}

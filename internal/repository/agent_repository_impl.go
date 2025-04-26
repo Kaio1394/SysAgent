@@ -27,3 +27,7 @@ func (a *AgentRepositoryImpl) GetAllAgent(ctx context.Context) ([]models.Agent, 
 func (a *AgentRepositoryImpl) UpdateAgent(ctx context.Context, agent models.Agent) error {
 	return a.db.WithContext(ctx).Model(&agent).Where("uuid = ?", agent.Uuid).Updates(&agent).Error
 }
+
+func (a *AgentRepositoryImpl) CollectData(ctx context.Context, data *models.CollectMetric) error {
+	return a.db.WithContext(ctx).Create(&data).Error
+}
