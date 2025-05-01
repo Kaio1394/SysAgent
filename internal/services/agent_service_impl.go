@@ -70,3 +70,11 @@ func (s *AgentServiceImpl) CollectData(ctx context.Context, data *dto.CollectMet
 	}
 	return nil
 }
+
+func (s *AgentServiceImpl) DeleteAllData(ctx context.Context) error {
+	return s.r.DeleteAllData(ctx)
+}
+
+func (s *AgentServiceImpl) GetDataByDate(ctx context.Context, startAt string, endAt string) ([]models.CollectMetric, error) {
+	return s.r.GetDataByDate(ctx, startAt, endAt)
+}

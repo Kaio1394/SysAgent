@@ -17,6 +17,10 @@ func RegisterMetricsRoute(r *gin.Engine, db *gorm.DB) {
 	r.GET("/memory", h.GetMemoryInfo)
 	r.GET("/disk", h.GetDiskInfo)
 	r.GET("/infos", h.GetDataCollection)
+
+	r.DELETE("/data/collection", h.DeleteDataCollection)
+	r.GET("/data/collection", h.GetDataByDate)
+
 	r.POST("/start", h.StartCollect)
 	r.POST("/stop", h.StopCollect)
 }

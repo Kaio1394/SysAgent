@@ -144,6 +144,7 @@ func (h *MetricsHandlerImpl) StopCollect(c *gin.Context) {
 	}
 	if agent.Status == "STOPPED" {
 		logger.Log.Errorln("agent already stopped")
+		c.JSON(http.StatusOK, gin.H{"info": "agent already stopped"})
 		return
 	}
 	err = h.sa.UpdateStatus(context.Background(), "STOPPED")
@@ -152,4 +153,32 @@ func (h *MetricsHandlerImpl) StopCollect(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"info": "stop collect success"})
+}
+
+func (h *MetricsHandlerImpl) DeleteDataCollection(c *gin.Context) {
+	err := h.sa.DeleteAllData(context.Background())
+	if err != nil {
+		logger.Log.Errorln(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"info": "delete data collection success"})
+}
+
+func (h *MetricsHandlerImpl) GetDataByDate(c *gin.Context) {
+	startTimeStr := c.GetHeader("startTime")
+	if startTimeStr == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "startTime required"})
+		return
+	}
+	enbTime := c.GetHeader("endTime")
+	if enbTime == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "endTime required"})
+		return
+	}
+	listData, err := h.sa.GetDataByDate(context.Background(), startTimeStr, enbTime)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": listData})
 }

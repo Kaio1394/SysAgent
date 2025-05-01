@@ -52,8 +52,3 @@ func (a *AgentHandlerImpl) UpdateStatusAgent(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "updated"})
 }
-
-func (a *AgentHandlerImpl) StartCollect(c *gin.Context) {
-
-}
-func (a *AgentHandlerImpl) StopCollect(c *gin.Context) {}
