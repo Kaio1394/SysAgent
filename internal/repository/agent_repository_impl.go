@@ -38,13 +38,27 @@ func (a *AgentRepositoryImpl) DeleteAllData(ctx context.Context) error {
 
 func (a *AgentRepositoryImpl) GetDataByDate(ctx context.Context, startAt string, endAt string) ([]models.CollectMetric, error) {
 	var results []models.CollectMetric
-	query := `
+	var query string
+
+	if endAt == "*" {
+		query = `
+		SELECT * FROM collect_metrics
+		WHERE created_at >= ?
+	`
+		err := a.db.Raw(query, startAt).Scan(&results).Error
+		if err != nil {
+			return nil, err
+		}
+		return results, nil
+	} else {
+		query = `
 		SELECT * FROM collect_metrics
 		WHERE created_at BETWEEN ? AND ?
 	`
-	err := a.db.Raw(query, startAt, endAt).Scan(&results).Error
-	if err != nil {
-		return nil, err
+		err := a.db.Raw(query, startAt, endAt).Scan(&results).Error
+		if err != nil {
+			return nil, err
+		}
+		return results, nil
 	}
-	return results, nil
 }
