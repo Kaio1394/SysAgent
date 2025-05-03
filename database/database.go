@@ -25,7 +25,7 @@ func ConnectDatabase() (*gorm.DB, error) {
 		return nil, fmt.Errorf("Type of dabase not suported: %s", typeDatabase)
 	}
 
-	if err := db.AutoMigrate(&models.CollectMetric{}, &models.Agent{}); err != nil {
+	if err := db.AutoMigrate(&models.CollectMetric{}, &models.Agent{}, &models.Script{}); err != nil {
 		return nil, fmt.Errorf("erro ao executar migração: %w", err)
 	}
 

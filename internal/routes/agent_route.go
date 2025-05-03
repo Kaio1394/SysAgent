@@ -16,4 +16,5 @@ func RegisterAgentRoutes(db *gorm.DB, r *gin.Engine) {
 	r.POST("/agent", h.CreateStatusAgent)
 	r.GET("/agent/status", h.GetStatusAgent)
 	r.PUT("/agent/status", h.UpdateStatusAgent)
+	r.POST("/agent/script/run", h.RunScriptAgent)
 }
