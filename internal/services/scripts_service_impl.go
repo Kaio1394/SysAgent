@@ -5,7 +5,11 @@ import (
 	"SysAgent/internal/models/dto"
 	"SysAgent/internal/repository"
 	"context"
-	"github.com/jinzhu/copier"
+	"time"
+)
+
+const (
+	LAYOUT string = "2006-01-02"
 )
 
 type ScriptsServiceImpl struct {
@@ -25,9 +29,22 @@ func (s *ScriptsServiceImpl) GetAllScripts(ctx context.Context) ([]models.Script
 }
 
 func (s *ScriptsServiceImpl) CreateNewScript(ctx context.Context, script *dto.ScriptCreateDto) error {
+	start, err := time.Parse(LAYOUT, script.StartDate)
+	if err != nil {
+		return err
+	}
+	end, err := time.Parse(LAYOUT, script.EndDate)
+	if err != nil {
+		return err
+	}
 	var scriptModel models.Script
-	_ = copier.CopyWithOption(&scriptModel, script, copier.Option{IgnoreEmpty: true})
-	err := s.r.CreateNewScript(ctx, &scriptModel)
+	scriptModel.Activated = script.Activated
+	scriptModel.Command = script.Command
+	scriptModel.StartDate = &start
+	scriptModel.EndDate = &end
+	scriptModel.ExecuteHour = script.ExecuteHour
+	scriptModel.Weekdays = script.Weekdays
+	err = s.r.CreateNewScript(ctx, &scriptModel)
 	if err != nil {
 		return err
 	}
