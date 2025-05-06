@@ -15,4 +15,5 @@ func RegisterScriptRoute(db *gorm.DB, r *gin.Engine) {
 
 	r.POST("/agent/script", h.CreateScriptHandler)
 	r.GET("/agent/script/all", h.GetAllScriptHandler)
+	r.POST("/agent/script/execute", h.ExecuteScriptHandlerByUuid)
 }

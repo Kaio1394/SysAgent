@@ -39,3 +39,23 @@ func (h *ScriptHandlerImpl) GetAllScriptHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"scripts": model})
 }
+
+func (h *ScriptHandlerImpl) GetScriptHandlerByUuid(c *gin.Context) {
+	uuid := c.GetHeader("Uuid")
+	script, err := h.s.GetScriptByUuid(context.Background(), uuid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"script": script})
+}
+
+func (h *ScriptHandlerImpl) ExecuteScriptHandlerByUuid(c *gin.Context) {
+	uuid := c.GetHeader("Uuid")
+	result, err := h.s.ExecuteScript(context.Background(), uuid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"output": result})
+}

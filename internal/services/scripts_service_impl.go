@@ -4,7 +4,9 @@ import (
 	"SysAgent/internal/models"
 	"SysAgent/internal/models/dto"
 	"SysAgent/internal/repository"
+	"SysAgent/internal/utils"
 	"context"
+	"errors"
 	"time"
 )
 
@@ -49,4 +51,30 @@ func (s *ScriptsServiceImpl) CreateNewScript(ctx context.Context, script *dto.Sc
 		return err
 	}
 	return nil
+}
+
+func (s *ScriptsServiceImpl) GetScriptByUuid(ctx context.Context, uuid string) (models.Script, error) {
+	if uuid == "" {
+		return models.Script{}, errors.New("uuid is empty")
+	}
+	script, err := s.r.GetScriptByUuid(ctx, uuid)
+	if err != nil {
+		return models.Script{}, err
+	}
+	return script, nil
+}
+
+func (s *ScriptsServiceImpl) ExecuteScript(ctx context.Context, uuid string) (string, error) {
+	if uuid == "" {
+		return "", errors.New("uuid is empty")
+	}
+	script, err := s.r.GetScriptByUuid(ctx, uuid)
+	if err != nil {
+		return "", err
+	}
+	result, err := utils.ExecuteScript(script.Command)
+	if err != nil {
+		return "", err
+	}
+	return result, nil
 }

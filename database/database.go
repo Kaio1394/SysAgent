@@ -28,6 +28,5 @@ func ConnectDatabase() (*gorm.DB, error) {
 	if err := db.AutoMigrate(&models.CollectMetric{}, &models.Agent{}, &models.Script{}); err != nil {
 		return nil, fmt.Errorf("erro ao executar migração: %w", err)
 	}
-
 	return db, nil
 }

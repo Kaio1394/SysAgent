@@ -26,3 +26,12 @@ func (r *ScriptRepositoryImpl) GetAllScripts(ctx context.Context) ([]models.Scri
 	}
 	return scripts, nil
 }
+
+func (r *ScriptRepositoryImpl) GetScriptByUuid(ctx context.Context, uuid string) (models.Script, error) {
+	var script models.Script
+	err := r.db.WithContext(ctx).First(&script, "uuid = ?", uuid).Error
+	if err != nil {
+		return script, err
+	}
+	return script, nil
+}
