@@ -3,6 +3,7 @@ package handlers
 import (
 	"SysAgent/internal/models/dto"
 	"SysAgent/internal/services"
+	"SysAgent/internal/utils"
 	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -58,4 +59,31 @@ func (h *ScriptHandlerImpl) ExecuteScriptHandlerByUuid(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"output": result})
+}
+
+func (h *ScriptHandlerImpl) ExecuteScryptSync(c *gin.Context) {
+	script, err := h.s.GetScriptByUuid(context.Background(), c.GetHeader("uuid"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	taskID := utils.ExecuteScriptSync(script.Command)
+	c.JSON(http.StatusOK, gin.H{"task_id": taskID})
+}
+
+func (h *ScriptHandlerImpl) GetResult(c *gin.Context) {
+	taskID := c.GetHeader("task_id")
+
+	status, output := utils.GetResult(taskID)
+
+	if status == "" || output == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "task_id is empty"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"task_id": taskID,
+		"status":  status,
+		"output":  output,
+	})
 }
